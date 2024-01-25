@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 
 const App = () => {
-  return <TipCalculator />
+  return (
+    <div>
+      <TipCalculator />
+    </div>
+  )
 }
 
 export default App
@@ -11,25 +15,20 @@ function TipCalculator() {
   const [percentage1, setPercentage1] = useState(0)
   const [percentage2, setPercentage2] = useState(0)
   const tip = bill * ((percentage1 + percentage2) / 2 / 100)
-
-  function handleReset() {
-    setBill('')
-    setPercentage1(0)
-    setPercentage2(0)
-  }
   return (
-    <div style={{ paddingLeft: '10px' }}>
+    <div>
       <BillInput bill={bill} onSetBill={setBill} />
       <SelectPercentage percentage={percentage1} onSelect={setPercentage1}>
-        How did you like the service?
+        <label>How did you like the service?</label>
       </SelectPercentage>
       <SelectPercentage percentage={percentage2} onSelect={setPercentage2}>
-        How did your friend like the service?
+        <label>How did your friend like the service?</label>
       </SelectPercentage>
+
       {bill > 0 &&
         <>
           <Output bill={bill} tip={tip} />
-          <Reset onReset={handleReset}>Reset</Reset>
+          <Reset />
         </>
       }
     </div>
@@ -39,8 +38,9 @@ function TipCalculator() {
 function BillInput({ bill, onSetBill }) {
   return (
     <div>
-      <label htmlFor="input">How much was the bill?</label>
+      <label>How much was the bill?</label>
       <input
+        type="text"
         placeholder="Bill value"
         value={bill}
         onChange={(e) => onSetBill(Number(e.target.value))}
@@ -48,40 +48,31 @@ function BillInput({ bill, onSetBill }) {
     </div>
   )
 }
-
 function SelectPercentage({ children, percentage, onSelect }) {
   return (
     <div>
-      <label>{children}</label>
+      {children}
       <select
         value={percentage}
         onChange={(e) => onSelect(Number(e.target.value))}
       >
-        <option value="0">dissatisfied ({percentage}%)</option>
-        <option value="5">It was okay (5%)</option>
-        <option value="10">It was okay (10%)</option>
-        <option value="20">Absolutely Amazing! (20%)</option>
+        <option value="0">Dissatisfied(0%)</option>
+        <option value="5">It was okay(5%)</option>
+        <option value="10">It was good(10%)</option>
+        <option value="20">Absolutely amazing!(20%)</option>
       </select>
     </div>
   )
 }
-
 function Output({ bill, tip }) {
   return (
     <div>
-      
       <h3>
         You pay {bill + tip} (${bill} + ${tip} tip)
       </h3>
     </div>
   )
 }
-
-function Reset({ children, onReset, bill }) {
-
-  return (
-    <div>
-        <button onClick={onReset}>{children}</button>
-    </div>
-  )
+function Reset() {
+  return <button>Reset</button>
 }
